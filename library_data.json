@@ -1,0 +1,88 @@
+{
+  "books": [
+    {
+      "id": "B001",
+      "title": "El Quijote",
+      "author": "Cervantes",
+      "year": 1605,
+      "copies_total": 2,
+      "copies_available": 0,
+      "reservations": []
+    },
+    {
+      "id": "B002",
+      "title": "Cien años de soledad",
+      "author": "García Márquez",
+      "year": 1967,
+      "copies_total": 1,
+      "copies_available": 0,
+      "reservations": [
+        "U001"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "U001",
+      "name": "Ana",
+      "email": "ana@example.com",
+      "borrowed": [
+        {
+          "book_id": "B001",
+          "quantity": 1
+        },
+        {
+          "book_id": "B002",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "U002",
+      "name": "Luis",
+      "email": "luis@example.com",
+      "borrowed": []
+    },
+    {
+      "id": "U003",
+      "name": "Jonatan",
+      "email": "Jonatan@example.com",
+      "borrowed": [
+        {
+          "book_id": "B001",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "U004",
+      "name": "Julian",
+      "email": "julian@example.com",
+      "borrowed": []
+    },
+    {
+      "id": "U005",
+      "name": "Prueba",
+      "email": "prueba@example.com",
+      "borrowed": []
+    },
+    {
+      "id": "U006",
+      "name": "Valorant",
+      "email": "Valorant@example.com",
+      "borrowed": []
+    },
+    {
+      "id": "U007",
+      "name": "youtube",
+      "email": "youtube@example.com",
+      "borrowed": []
+    },
+    {
+      "id": "U008",
+      "name": "goggle",
+      "email": "goggle@example.com",
+      "borrowed": []
+    }
+  ]
+}

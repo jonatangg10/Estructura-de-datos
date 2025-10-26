@@ -1,0 +1,11 @@
+[2025-10-12 19:03:43] [✓] Usuario 'Prueba' agregado.
+[2025-10-25 23:14:28] [✓] Usuario 'Valorant' agregado.
+[2025-10-25 23:30:10] [✓] Usuario 'youtube' agregado.
+[2025-10-25 23:31:12] [✓] Usuario 'goggle' agregado.
+[2025-10-26 01:00:21] [X] Usuario Ana (U001) no existe.
+[2025-10-26 01:00:24] [X] Usuario Ana (U001) no existe.
+[2025-10-26 01:00:40] [X] Usuario Ana (U001) no existe.
+[2025-10-26 01:10:02] [✓] Préstamo exitoso: 'El Quijote' para Ana. Disponibles: 1.
+[2025-10-26 01:39:13] [✓] Préstamo exitoso: 'El Quijote' para Jonatan. Disponibles: 0.
+[2025-10-26 01:39:41] [✓] Préstamo exitoso: 'Cien años de soledad' para Ana. Disponibles: 0.
+[2025-10-26 01:39:53] [→] Sin copias. Ana quedó en cola para 'Cien años de soledad'. Posición: 1.
