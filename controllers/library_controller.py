@@ -32,39 +32,57 @@ class LibraryController:
         self.view.btn_undo.clicked.connect(self.on_undo)
 
     def _refresh_loan_combos(self):
-        # Usuarios
+        # Usuarios (sin cambios)
         current_user = self.view.loan_user_combo.currentText()
         self.view.loan_user_combo.blockSignals(True)
         self.view.loan_user_combo.clear()
         for u in self.model.users:
-            # Guardar el ID puro como userData
             self.view.loan_user_combo.addItem(f"{u.name} ({u.id})", userData=u.id)
         if current_user and current_user not in [self.view.loan_user_combo.itemText(i) for i in range(self.view.loan_user_combo.count())]:
             self.view.loan_user_combo.setEditText(current_user)
         self.view.loan_user_combo.blockSignals(False)
-
-        # Libros
+    
+        # Libros: MOSTRAR TODOS, no solo los disponibles
         current_book = self.view.loan_book_combo.currentText()
         self.view.loan_book_combo.blockSignals(True)
         self.view.loan_book_combo.clear()
+        
         for b in self.model.books:
+            # Mostrar información de disponibilidad
             if b.copies_available > 0:
-                # Guardar el ID puro como userData
-                self.view.loan_book_combo.addItem(f"{b.id} — {b.title}", userData=b.id)
+                display_text = f"{b.id} — {b.title} (Disponible: {b.copies_available})"
+            else:
+                # Mostrar información de la cola de espera
+                queue_position = len(b.reservations)
+                display_text = f"{b.id} — {b.title} (En cola: {queue_position})"
+            
+            self.view.loan_book_combo.addItem(display_text, userData=b.id)
+        
         if current_book and current_book not in [self.view.loan_book_combo.itemText(i) for i in range(self.view.loan_book_combo.count())]:
             self.view.loan_book_combo.setEditText(current_book)
         self.view.loan_book_combo.blockSignals(False)
-    
+
     def _notify(self, text: str, level: str = "info", timeout_ms: int = 10000):
         mb = QMessageBox(self.view)
         mb.setWindowTitle("Aviso")
-        mb.setText(text)
-        if level == "error":
-            mb.setIcon(QMessageBox.Critical)
-        elif level == "warn":
-            mb.setIcon(QMessageBox.Warning)
-        else:
+
+        # Personalizar mensajes según el tipo
+        if "→" in text:  # Mensaje de cola de espera
             mb.setIcon(QMessageBox.Information)
+            mb.setText(f"📋 {text}")
+        elif "✓" in text:  # Mensaje de éxito
+            mb.setIcon(QMessageBox.Information) 
+            mb.setText(f"✅ {text}")
+        elif "X" in text:  # Mensaje de error
+            mb.setIcon(QMessageBox.Critical)
+            mb.setText(f"❌ {text}")
+        elif "↶" in text:  # Mensaje de deshacer
+            mb.setIcon(QMessageBox.Information)
+            mb.setText(f"↩️ {text}")
+        else:  # Mensaje informativo
+            mb.setIcon(QMessageBox.Information)
+            mb.setText(f"ℹ️ {text}")
+
         mb.setStandardButtons(QMessageBox.Ok)
         mb.setWindowModality(Qt.NonModal)
         mb.show()
@@ -124,9 +142,16 @@ class LibraryController:
         books = self.model.books
         self.view.table_books.setRowCount(len(books))
         for row, b in enumerate(books):
+            # Resaltar libros con cola de espera
+            en_cola = len(b.reservations)
+            if en_cola > 0:
+                disponibles_text = f"{b.copies_available} ⚠️({en_cola} en cola)"
+            else:
+                disponibles_text = str(b.copies_available)
+                
             data = [b.id, b.title, b.author, str(b.year),
-                    str(b.copies_total), str(b.copies_available),
-                    str(len(b.reservations))]
+                    str(b.copies_total), disponibles_text,
+                    str(en_cola)]
             for col, val in enumerate(data):
                 self.view.table_books.setItem(row, col, QTableWidgetItem(val))
         
@@ -234,16 +259,14 @@ class LibraryController:
 
     # Préstamos
     def on_borrow(self):
-        # Obtener IDs usando currentData() que devuelve el userData puro
+        # Obtener IDs
         user_id = self.view.loan_user_combo.currentData()
         if not user_id:
-            # Fallback: extraer del texto si no hay userData
             user_text = self.view.loan_user_combo.currentText().strip()
             user_id = self._extract_user_id(user_text)
 
         book_id = self.view.loan_book_combo.currentData()
         if not book_id:
-            # Fallback: extraer del texto si no hay userData
             book_text = self.view.loan_book_combo.currentText().strip()
             book_id = self._extract_book_id(book_text)
 
@@ -254,11 +277,12 @@ class LibraryController:
         msg = self.model.borrow_book(user_id, book_id)
         self._notify(msg)
 
+        # Actualizar las vistas
         if self.view.table_books.isVisible():
             self.on_list_books()
         if self.view.table_users.isVisible():
             self.on_list_users()
-        self._refresh_loan_combos()
+        self._refresh_loan_combos()  # Esto actualizará la información de disponibilidad
 
     def on_return(self):
         # Obtener el texto seleccionado del combo

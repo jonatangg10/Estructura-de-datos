@@ -7,7 +7,9 @@
       "year": 1605,
       "copies_total": 2,
       "copies_available": 0,
-      "reservations": []
+      "reservations": [
+        "U003"
+      ]
     },
     {
       "id": "B002",
