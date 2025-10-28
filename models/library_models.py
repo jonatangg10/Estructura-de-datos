@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 import json
 import os
+from datetime import datetime
 
 @dataclass
 class Book:
@@ -45,19 +46,23 @@ class Book:
 @dataclass
 class BorrowedBook:
     book_id: str
+    fecha: str
     quantity: int = 1
+    
 
     def to_dict(self) -> dict:
         return {
             "book_id": self.book_id,
-            "quantity": self.quantity
+            "quantity": self.quantity,
+            "fecha":self.fecha
         }
 
     @staticmethod
     def from_dict(d: dict) -> "BorrowedBook":
         return BorrowedBook(
             book_id=d["book_id"],
-            quantity=int(d.get("quantity", 1))
+            quantity=int(d.get("quantity", 1)),
+            fecha=d["fecha"]
         )
 
 @dataclass
@@ -156,7 +161,7 @@ class LibraryStore:
         self._save()
         return f"[✓] Usuario '{user.name}' agregado."
 
-    def borrow_book(self, user_id: str, book_id: str) -> str:
+    def borrow_book(self, user_id: str, book_id: str,fecha:datetime) -> str:
         user = self.find_user(user_id)
         book = self.find_book(book_id)
         if not user: return f"[X] Usuario {user_id} no existe."
@@ -175,7 +180,7 @@ class LibraryStore:
             
             # SI NO LO TIENE, AGREGARLO
             if not found:
-                user.borrowed.append(BorrowedBook(book_id=book_id))
+                user.borrowed.append(BorrowedBook(book_id=book_id,fecha=fecha))
             
             self.undo_stack.append({"op": "borrow", "user_id": user_id, "book_id": book_id})
             self._save()
@@ -224,7 +229,7 @@ class LibraryStore:
                         found = True
                         break
                 if not found:
-                    next_user.borrowed.append(BorrowedBook(book_id=book_id))
+                    next_user.borrowed.append(BorrowedBook(book_id=book_id,fecha=datetime.now().date()))
                 autoloan_to_next = next_user_id
                 msg_auto = f" y asignado automáticamente a {next_user.name} por reserva."
             else:
@@ -232,7 +237,7 @@ class LibraryStore:
         else:
             msg_auto = ""
             
-        self.undo_stack.append({"op": "return", "user_id": user_id, "book_id": book_id, "autoloan_to_next": autoloan_to_next})
+        self.undo_stack.append({"op": "return", "user_id": user_id, "book_id": book_id,"fecha": borrowed_item.fecha,"autoloan_to_next": autoloan_to_next})
         self._save()
         return f"[✓] Devolución de '{book.title}' registrada{msg_auto} Disponibles: {book.copies_available}."
 
@@ -285,7 +290,8 @@ class LibraryStore:
                         found = True
                         break
                 if not found:
-                    user.borrowed.append(BorrowedBook(book_id=book.id))
+                    fecha=last["fecha"]
+                    user.borrowed.append(BorrowedBook(book_id=book.id,fecha=fecha))
                     
                 self._save()
                 return f"[↶] Deshecho: devolución de '{book.title}' de {user.name}."

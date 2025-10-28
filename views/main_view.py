@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import (
     QWidget, QTabWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
     QLineEdit, QPushButton, QLabel, QMessageBox, QDesktopWidget,
-    QTableWidget, QTableWidgetItem, QHeaderView, QComboBox
+    QTableWidget, QTableWidgetItem, QHeaderView, QComboBox,QDateEdit
 )
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt,QDate
 
 class MainView(QWidget):
     def __init__(self):
@@ -142,8 +142,15 @@ class MainView(QWidget):
         self.loan_book_combo.setEditable(True)
         self.loan_book_combo.setInsertPolicy(QComboBox.NoInsert)
 
+        self.prestamo_fecha = QDateEdit()
+        self.prestamo_fecha.setDate(QDate.currentDate())
+        self.prestamo_fecha.setCalendarPopup(True)
+
+
         form.addRow("ID Usuario:", self.loan_user_combo)
         form.addRow("ID Libro:", self.loan_book_combo)
+        form.addRow("Fecha:", self.prestamo_fecha)
+
 
         self.btn_borrow = QPushButton("Prestar")
         self.btn_borrow.setStyleSheet(self._primary_btn_style())
@@ -155,9 +162,27 @@ class MainView(QWidget):
         row_btns.addWidget(self.btn_borrow)
         row_btns.addWidget(self.btn_return)
         row_btns.addWidget(self.btn_undo)
+        row_btns.setContentsMargins(10,30, 10, 10)
+
+
+        # apartado de listado de prestamos
+        self.btn_list_prestados = QPushButton("Listar Prestamos")
+
+        self.prestados_filter = QLineEdit()
+        self.prestados_filter.setPlaceholderText("Filtrar Prestamos (Usuario, Libro, Fecha)…")
+        self.prestados_filter.setVisible(False)
+
+        self.table_prestamos = QTableWidget()
+        self.table_prestamos.setColumnCount(4)
+        self.table_prestamos.setHorizontalHeaderLabels(["Libro","Usuario","Cantidad","Fecha"])
+        self._tune_table(self.table_prestamos)
+        self.table_prestamos.setVisible(False)
 
         col = QVBoxLayout()
         col.addLayout(form)
         col.addLayout(row_btns)
+        col.addWidget(self.btn_list_prestados)
+        col.addWidget(self.prestados_filter)
+        col.addWidget(self.table_prestamos)
         w.setLayout(col)
         return w

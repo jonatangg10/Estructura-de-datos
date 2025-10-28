@@ -10,3 +10,9 @@
 [2025-10-26 01:39:41] [✓] Préstamo exitoso: 'Cien años de soledad' para Ana. Disponibles: 0.
 [2025-10-26 01:39:53] [→] Sin copias. Ana quedó en cola para 'Cien años de soledad'. Posición: 1.
 [2025-10-26 01:47:23] [→] Sin copias. Jonatan quedó en cola para 'El Quijote'. Posición: 1.
+[2025-10-28 14:11:00] [✓] Préstamo exitoso: 'Cien años de soledad' para Julian. Disponibles: 0.
+[2025-10-28 14:13:16] No puedes indicar una fecha menor a la actual.
+[2025-10-28 14:33:14] [✓] Devolución de 'Cien años de soledad' registrada y asignado automáticamente a Ana por reserva. Disponibles: 0.
+[2025-10-28 15:05:26] [✓] Préstamo exitoso: 'El Quijote' para Julian. Disponibles: 0.
+[2025-10-28 15:10:21] [✓] Devolución de 'El Quijote' registrada y asignado automáticamente a Jonatan por reserva. Disponibles: 0.
+[2025-10-28 15:10:36] [↶] Deshecho: devolución de 'El Quijote' de Julian.

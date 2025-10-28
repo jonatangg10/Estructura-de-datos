@@ -5,7 +5,7 @@
       "title": "El Quijote",
       "author": "Cervantes",
       "year": 1605,
-      "copies_total": 2,
+      "copies_total": 3,
       "copies_available": 0,
       "reservations": [
         "U003"
@@ -16,11 +16,9 @@
       "title": "Cien años de soledad",
       "author": "García Márquez",
       "year": 1967,
-      "copies_total": 1,
+      "copies_total": 2,
       "copies_available": 0,
-      "reservations": [
-        "U001"
-      ]
+      "reservations": []
     }
   ],
   "users": [
@@ -31,11 +29,13 @@
       "borrowed": [
         {
           "book_id": "B001",
-          "quantity": 1
+          "quantity": 1,
+          "fecha": "2025-10-28"
         },
         {
           "book_id": "B002",
-          "quantity": 1
+          "quantity": 2,
+          "fecha": "2025-10-28"
         }
       ]
     },
@@ -52,7 +52,8 @@
       "borrowed": [
         {
           "book_id": "B001",
-          "quantity": 1
+          "quantity": 1,
+          "fecha": "2025-10-28"
         }
       ]
     },
@@ -60,7 +61,13 @@
       "id": "U004",
       "name": "Julian",
       "email": "julian@example.com",
-      "borrowed": []
+      "borrowed": [
+        {
+          "book_id": "B001",
+          "quantity": 1,
+          "fecha": "2025-10-31"
+        }
+      ]
     },
     {
       "id": "U005",

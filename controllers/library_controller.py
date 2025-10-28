@@ -30,6 +30,9 @@ class LibraryController:
         self.view.btn_borrow.clicked.connect(self.on_borrow)
         self.view.btn_return.clicked.connect(self.on_return)
         self.view.btn_undo.clicked.connect(self.on_undo)
+        #listado de prestado
+        self.view.btn_list_prestados.clicked.connect(self.on_toggle_list_prestados)
+        self.view.prestados_filter.textChanged.connect(self.filter_prestamos_table)
 
     def _refresh_loan_combos(self):
         # Usuarios (sin cambios)
@@ -273,8 +276,13 @@ class LibraryController:
         if not user_id or not book_id:
             self._notify("Debes indicar ID de usuario y de libro.", "warn", 8000)
             return
+        
+        fecha=self.view.prestamo_fecha.dateTime().toPyDateTime().date()
+        if fecha < datetime.now().date():
+            self._notify("No puedes indicar una fecha menor a la actual.", "warn", 8000)
+            return
 
-        msg = self.model.borrow_book(user_id, book_id)
+        msg = self.model.borrow_book(user_id, book_id,fecha.isoformat())
         self._notify(msg)
 
         # Actualizar las vistas
@@ -345,6 +353,52 @@ class LibraryController:
         if self.view.table_users.isVisible():
             self.on_list_users()
         self._refresh_loan_combos()
+
+
+
+    # funciones listado de prestados
+
+    def on_toggle_list_prestados(self):
+        if not self.view.table_prestamos.isVisible():
+            self.on_list_prestados()
+            self.view.table_prestamos.setVisible(True)
+            self.view.prestados_filter.setVisible(True)
+            self.view.prestados_filter.setFocus()
+            self.view.btn_list_prestados.setText("Ocultar lista de Prestamos")
+        else:
+            self.view.table_prestamos.setVisible(False)
+            self.view.prestados_filter.clear()
+            self.view.prestados_filter.setVisible(False)
+            self.view.btn_list_prestados.setText("Listar Prestamos")
+
+    def on_list_prestados(self):
+        users = self.model.users
+        self.view.table_prestamos.setRowCount(sum(len(u.borrowed) for u in users if u.borrowed))
+        row=0
+        for u in users:
+            for borrowed_book in u.borrowed:
+                book = self.model.find_book(borrowed_book.book_id)         
+                self.view.table_prestamos.setItem(row, 1, QTableWidgetItem(f"{borrowed_book.book_id} - {self.model.find_book(borrowed_book.book_id).title}"))
+                self.view.table_prestamos.setItem(row, 0, QTableWidgetItem(f"{u.id} - {u.name}"))
+                self.view.table_prestamos.setItem(row, 2, QTableWidgetItem(f"{borrowed_book.quantity}"))
+                self.view.table_prestamos.setItem(row, 3, QTableWidgetItem(f"{borrowed_book.fecha}"))
+                row+=1
+        # Aplicar filtro si está activo
+        if self.view.prestados_filter.isVisible() and self.view.prestados_filter.text().strip():
+            self.filter_prestamos_table(self.view.prestados_filter.text())
+
+    def filter_prestamos_table(self, text: str):
+        text = text.strip().lower()
+        rows = self.view.table_prestamos.rowCount()
+        for r in range(rows):
+            show = not bool(text)
+            if text:
+                for c in range(self.view.table_prestamos.columnCount()):
+                    item = self.view.table_prestamos.item(r, c)
+                    if item and text in item.text().lower():
+                        show = True
+                        break
+            self.view.table_prestamos.setRowHidden(r, not show)
 
     def show(self):
         self.view.show()
