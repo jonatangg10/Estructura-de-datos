@@ -17,6 +17,7 @@ class MainView(QWidget):
         tabs.addTab(self._tab_books(), "Libros")
         tabs.addTab(self._tab_users(), "Usuarios")
         tabs.addTab(self._tab_loans(), "Préstamos")
+        tabs.setStyleSheet("font-weight: bold;font-size:22px")
 
         lay = QVBoxLayout()
         lay.addWidget(tabs)
@@ -35,6 +36,7 @@ class MainView(QWidget):
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         table.horizontalHeader().setHighlightSections(False)
         table.setSortingEnabled(True)
+        table.setStyleSheet("background-color:#9eccf3")
 
     def _primary_btn_style(self) -> str:
         return (
@@ -50,7 +52,53 @@ class MainView(QWidget):
             "background-color: #228B22;"
             "}"
         )
+    
 
+    def _danger_btn_style(self) -> str:
+        return (
+            "QPushButton {"
+            "background-color:#ff292f;"
+            "color: white;"
+            "font-size: 15px;"
+            "font-weight: bold;"
+            "border-radius: 8px;"
+            "padding: 8px 12px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color:#aa2a2d;"
+            "}"
+        )
+    
+    def _secundary_btn_style(self) -> str:
+        return (
+            "QPushButton {"
+            "background-color: #2f36c1;"
+            "color: white;"
+            "font-size: 15px;"
+            "font-weight: bold;"
+            "border-radius: 8px;"
+            "padding: 8px 12px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: #24286f;"
+            "}"
+        )
+    
+    def _warning_btn_style(self) -> str:
+        return (
+            "QPushButton {"
+            "background-color: #ad7e26;"
+            "color: white;"
+            "font-size: 15px;"
+            "font-weight: bold;"
+            "border-radius: 8px;"
+            "padding: 8px 12px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: #7d5b1b;"
+            "}"
+        )
+        
     def _tab_books(self):
         w = QWidget()
         form = QFormLayout()
@@ -69,6 +117,7 @@ class MainView(QWidget):
         self.btn_add_book.setStyleSheet(self._primary_btn_style())
 
         self.btn_list_books = QPushButton("Listar libros")
+        self.btn_list_books.setStyleSheet(self._warning_btn_style())
 
         self.book_filter = QLineEdit()
         self.book_filter.setPlaceholderText("Filtrar libros (ID, Título, Autor, Año, Totales, Disponibles, En cola)…")
@@ -87,6 +136,7 @@ class MainView(QWidget):
         col.addWidget(self.book_filter)
         col.addWidget(self.table_books)
         w.setLayout(col)
+        w.setStyleSheet("font-weight: normal;font-size:17px")
         return w
 
     def _tab_users(self):
@@ -103,6 +153,8 @@ class MainView(QWidget):
         self.btn_add_user.setStyleSheet(self._primary_btn_style())
     
         self.btn_list_users = QPushButton("Listar usuarios")
+        self.btn_list_users.setStyleSheet(self._warning_btn_style())
+
     
         self.user_filter = QLineEdit()
         self.user_filter.setPlaceholderText("Filtrar usuarios (ID, Nombre, Email o Prestados)…")
@@ -128,6 +180,7 @@ class MainView(QWidget):
         col.addWidget(self.user_filter)
         col.addWidget(self.table_users)
         w.setLayout(col)
+        w.setStyleSheet("font-weight: normal;font-size:17px")
         return w
 
     def _tab_loans(self):
@@ -156,7 +209,10 @@ class MainView(QWidget):
         self.btn_borrow.setStyleSheet(self._primary_btn_style())
         
         self.btn_return = QPushButton("Devolver")
+        self.btn_return.setStyleSheet(self._secundary_btn_style())
+
         self.btn_undo = QPushButton("Deshacer último")
+        self.btn_undo.setStyleSheet(self._danger_btn_style())
 
         row_btns = QHBoxLayout()
         row_btns.addWidget(self.btn_borrow)
@@ -167,6 +223,7 @@ class MainView(QWidget):
 
         # apartado de listado de prestamos
         self.btn_list_prestados = QPushButton("Listar Prestamos")
+        self.btn_list_prestados.setStyleSheet(self._warning_btn_style())
 
         self.prestados_filter = QLineEdit()
         self.prestados_filter.setPlaceholderText("Filtrar Prestamos (Usuario, Libro, Fecha)…")
@@ -178,11 +235,29 @@ class MainView(QWidget):
         self._tune_table(self.table_prestamos)
         self.table_prestamos.setVisible(False)
 
+        # lista resevas
+        self.btn_list_reservas = QPushButton("Listar Reservaciones")
+        self.btn_list_reservas.setStyleSheet(self._warning_btn_style())
+
+        self.reservas_filter = QLineEdit()
+        self.reservas_filter.setPlaceholderText("Filtrar Reservaciones (Usuario, Libro)…")
+        self.reservas_filter.setVisible(False)
+
+        self.table_reservas = QTableWidget()
+        self.table_reservas.setColumnCount(2)
+        self.table_reservas.setHorizontalHeaderLabels(["Libro","Usuario"])
+        self._tune_table(self.table_reservas)
+        self.table_reservas.setVisible(False)
+
         col = QVBoxLayout()
         col.addLayout(form)
         col.addLayout(row_btns)
         col.addWidget(self.btn_list_prestados)
         col.addWidget(self.prestados_filter)
         col.addWidget(self.table_prestamos)
+        col.addWidget(self.btn_list_reservas)
+        col.addWidget(self.reservas_filter)
+        col.addWidget(self.table_reservas)
         w.setLayout(col)
+        w.setStyleSheet("font-weight: normal;font-size:17px")
         return w

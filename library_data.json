@@ -8,7 +8,8 @@
       "copies_total": 3,
       "copies_available": 0,
       "reservations": [
-        "U003"
+        "U003",
+        "U001"
       ]
     },
     {
@@ -18,7 +19,9 @@
       "year": 1967,
       "copies_total": 2,
       "copies_available": 0,
-      "reservations": []
+      "reservations": [
+        "U003"
+      ]
     }
   ],
   "users": [

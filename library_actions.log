@@ -16,3 +16,6 @@
 [2025-10-28 15:05:26] [✓] Préstamo exitoso: 'El Quijote' para Julian. Disponibles: 0.
 [2025-10-28 15:10:21] [✓] Devolución de 'El Quijote' registrada y asignado automáticamente a Jonatan por reserva. Disponibles: 0.
 [2025-10-28 15:10:36] [↶] Deshecho: devolución de 'El Quijote' de Julian.
+[2025-10-28 22:27:17] [→] Sin copias. Ana quedó en cola para 'El Quijote'. Posición: 2.
+[2025-10-28 22:27:43] [→] Sin copias. Jonatan quedó en cola para 'Cien años de soledad'. Posición: 1.
+[2025-10-28 22:28:03] [i] No hay operaciones para deshacer.
