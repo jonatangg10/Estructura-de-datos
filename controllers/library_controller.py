@@ -368,6 +368,12 @@ class LibraryController:
             self.view.prestados_filter.setVisible(True)
             self.view.prestados_filter.setFocus()
             self.view.btn_list_prestados.setText("Ocultar lista de Prestamos")
+            if self.view.table_reservas.isVisible():
+                self.view.table_reservas.setVisible(False)
+                self.view.reservas_filter.clear()
+                self.view.reservas_filter.setVisible(False)
+                self.view.btn_list_reservas.setText("Listar Reservaciones")
+
         else:
             self.view.table_prestamos.setVisible(False)
             self.view.prestados_filter.clear()
@@ -410,6 +416,11 @@ class LibraryController:
             self.view.reservas_filter.setVisible(True)
             self.view.reservas_filter.setFocus()
             self.view.btn_list_reservas.setText("Ocultar lista de Reservaciones")
+            if self.view.table_prestamos.isVisible():
+                self.view.table_prestamos.setVisible(False)
+                self.view.prestados_filter.clear()
+                self.view.prestados_filter.setVisible(False)
+                self.view.btn_list_prestados.setText("Listar Prestamos")
         else:
             self.view.table_reservas.setVisible(False)
             self.view.reservas_filter.clear()
